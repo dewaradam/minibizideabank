@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="200 micro-business ideas — filter, vote, and add notes. Built to start small and hand off.">
+<meta property="og:title" content="200 Micro-Businesses — The Idea Bank">
+<meta property="og:description" content="Two hundred small bets. Filter, vote, and leave notes — shared with everyone you send the link to.">
+<meta property="og:type" content="website">
+<title>200 Micro-Businesses — The Idea Bank</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Spline+Sans+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+  :root{
+    --ink:#10130f; --paper:#e8e4d8; --pine:#1f3a2e; --moss:#4a7a4f;
+    --rust:#b8501f; --gold:#c9a227; --line:rgba(16,19,15,.18); --warn:#9c2b1a; --card:#f1eee4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:clamp(20px,5vw,52px)}
+  .hero{border-bottom:3px solid var(--ink);padding-bottom:24px}
+  .eyebrow{font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--rust);margin-bottom:14px}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(28px,5vw,52px);line-height:.98;letter-spacing:-.02em}
+  h1 em{font-style:italic;color:var(--pine)}
+  .sub{font-size:clamp(14px,2vw,16px);max-width:640px;margin-top:14px;color:#363a30}
+  .disclaimer{background:var(--pine);color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:11px;line-height:1.6;padding:12px 15px;margin-top:20px;border-radius:2px}
+  .disclaimer b{color:var(--gold)}
+
+  /* CONNECTION BANNER */
+  .banner{font-family:'Spline Sans Mono',monospace;font-size:11.5px;line-height:1.6;padding:11px 15px;margin-bottom:18px;border:2px solid var(--ink);border-radius:2px}
+  .banner.warn{background:var(--gold);color:var(--ink)}
+  .banner.ok{background:#dfe7d8;color:var(--pine)}
+  .banner b{color:var(--warn)}
+  .banner code{background:rgba(16,19,15,.12);padding:1px 5px;border-radius:2px}
+
+  /* CONTROLS */
+  .controls{margin-top:32px;background:var(--card);border:2px solid var(--ink);padding:20px 22px;position:sticky;top:0;z-index:10}
+  .controls h2{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--rust);margin-bottom:14px}
+  .cgrid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr 1fr;gap:12px 16px;align-items:end}
+  @media(max-width:880px){.cgrid{grid-template-columns:1fr 1fr}}
+  @media(max-width:480px){.cgrid{grid-template-columns:1fr}}
+  .ctl label{display:block;font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#5a5e52;margin-bottom:5px}
+  .ctl input,.ctl select{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:9px 10px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:2px}
+  .ctl input:focus,.ctl select:focus{outline:2px solid var(--rust);outline-offset:-1px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;align-items:center}
+  .chip{font-family:'Spline Sans Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:6px 11px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:2px;cursor:pointer;transition:.12s}
+  .chip.on{background:var(--ink);color:var(--paper)}
+  .chip.reset{border-color:var(--rust);color:var(--rust)}
+  .chip.reset:hover{background:var(--rust);color:#fff}
+  .refresh{font-family:'Spline Sans Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:6px 11px;border:1.5px solid var(--pine);background:transparent;color:var(--pine);border-radius:2px;cursor:pointer;transition:.12s}
+  .refresh:hover{background:var(--pine);color:var(--paper)}
+  .count{margin-top:14px;font-family:'Spline Sans Mono',monospace;font-size:12px;color:var(--pine);font-weight:600}
+
+  /* CARDS */
+  .deck{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+  @media(max-width:880px){.deck{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.deck{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line);background:var(--card);padding:16px 17px;display:flex;flex-direction:column;border-radius:2px}
+  .card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+  .card .num{font-family:'Spline Sans Mono',monospace;font-size:10px;color:#9a9a8e}
+  .card .catpill{font-family:'Spline Sans Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:3px 7px;border-radius:2px;background:var(--pine);color:var(--paper);white-space:nowrap}
+  .card h3{font-family:'Fraunces',serif;font-weight:600;font-size:16px;line-height:1.15;margin-bottom:7px}
+  .card .blurb{font-size:12.5px;color:#41463a;line-height:1.45;flex:1}
+  .card .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:13px;padding-top:11px;border-top:1px dotted var(--line)}
+  .tag{font-family:'Spline Sans Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;padding:3px 6px;border-radius:2px}
+  .tag.cost{background:var(--ink);color:var(--paper)}
+  .tag.cost.over{background:var(--warn);color:#fff}
+  .tag.touch{background:#d8d2bf;color:var(--ink)}
+  .tag.ai{background:var(--gold);color:var(--ink)}
+  .tag.g{background:transparent;border:1px solid var(--line);color:#5a5e52}
+  .card .acts{display:flex;gap:7px;margin-top:11px;align-items:center}
+  .vote{font-family:'Spline Sans Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border:1.5px solid var(--pine);background:transparent;color:var(--pine);border-radius:2px;cursor:pointer;transition:.1s;display:flex;align-items:center;gap:5px}
+  .vote:hover{background:var(--pine);color:var(--paper)}
+  .vote:active{transform:scale(.94)}
+  .vote.hot{background:var(--pine);color:var(--paper)}
+  .vote .vn{font-size:12px}
+  .notebtn{font-family:'Spline Sans Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border:1.5px solid var(--line);background:transparent;color:#5a5e52;border-radius:2px;cursor:pointer;transition:.1s}
+  .notebtn:hover{border-color:var(--ink);color:var(--ink)}
+  .notebtn.has{border-color:var(--rust);color:var(--rust)}
+  .notewrap{margin-top:10px}
+  .notelist{display:flex;flex-direction:column;gap:7px;margin-bottom:9px}
+  .noteitem{font-size:12px;line-height:1.45;color:#2c3026;background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--pine);padding:7px 9px;border-radius:2px;white-space:pre-wrap;word-break:break-word}
+  .notetime{display:block;font-family:'Spline Sans Mono',monospace;font-size:9px;color:#9a9a8e;margin-top:4px}
+  .noteempty{font-family:'Spline Sans Mono',monospace;font-size:10.5px;color:#9a9a8e;margin-bottom:9px}
+  .notein{width:100%;min-height:62px;font-family:'Inter',sans-serif;font-size:12px;line-height:1.45;padding:8px 9px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:2px;resize:vertical}
+  .notein:focus{outline:2px solid var(--rust);outline-offset:-1px}
+  .noterow{display:flex;align-items:center;gap:10px;margin-top:7px}
+  .notesave{font-family:'Spline Sans Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:5px 12px;border:none;background:var(--ink);color:var(--paper);border-radius:2px;cursor:pointer}
+  .notesave:hover{background:var(--rust)}
+  .notesave:disabled{opacity:.5;cursor:default}
+  .notestat{font-family:'Spline Sans Mono',monospace;font-size:10px;color:var(--moss)}
+  .sharednote{margin-top:10px;font-family:'Spline Sans Mono',monospace;font-size:10.5px;color:var(--rust);line-height:1.5}
+  .empty{grid-column:1/-1;text-align:center;padding:50px 20px;font-family:'Spline Sans Mono',monospace;font-size:13px;color:#5a5e52}
+
+  .footnote{margin-top:40px;font-family:'Spline Sans Mono',monospace;font-size:10.5px;color:#5a5e52;line-height:1.7;border-top:1px solid var(--line);padding-top:18px}
+  .footnote b{color:var(--warn)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="banner" class="banner" style="display:none"></div>
+
+  <div class="hero">
+    <div class="eyebrow">200 micro-businesses · &lt;$1k start · low-touch · AI-scalable · v1</div>
+    <h1>Two hundred small bets.<br>Build one in a <em>hyperfocus,<br>then let it run, gift it, or<br>hand it to a cause.</em></h1>
+    <p class="sub">Filter by what matters to you that week: cost to start, ongoing touch, how much AI carries it, and whether it's local, partnership-driven, kid/handoff-friendly, recurring, or fully digital. Each card is a starting point, not a finished plan.</p>
+    <div class="disclaimer"><b>These are ideas, not validated businesses.</b> No revenue numbers are attached — I won't invent those. Cost / touch / AI ratings are my rough directional estimates, not per-idea research; verify before banking on any. "Immediate income" is optimistic — most need real validation and setup first. A few items (mostly rentals/physical) exceed $1k and are flagged <b>$1k+</b> in red. Several touch regulated areas (food, childcare, health, finance) — licensing and rules apply. <b>Pressure-test the few you like; ignore the rest.</b></div>
+  </div>
+
+  <div class="controls">
+    <h2>Filter the bank</h2>
+    <div class="cgrid">
+      <div class="ctl"><label>Search</label><input type="text" id="q" placeholder="story, garden, AI, rental…"></div>
+      <div class="ctl"><label>Category</label><select id="cat"></select></div>
+      <div class="ctl"><label>Cost to start</label><select id="cost">
+        <option value="">Any cost</option>
+        <option value="0">Under $100</option>
+        <option value="1">$100–500</option>
+        <option value="2">$500–1k</option>
+        <option value="3">$1k+ (over budget)</option>
+      </select></div>
+      <div class="ctl"><label>Ongoing touch</label><select id="touch">
+        <option value="">Any touch</option>
+        <option value="L">Low</option>
+        <option value="M">Medium</option>
+      </select></div>
+      <div class="ctl"><label>AI leverage</label><select id="ai">
+        <option value="">Any</option>
+        <option value="H">High</option>
+        <option value="M">Medium</option>
+        <option value="L">Low</option>
+      </select></div>
+      <div class="ctl"><label>Sort by</label><select id="sort">
+        <option value="default">Idea order</option>
+        <option value="votes">Most voted</option>
+        <option value="notes">Has notes first</option>
+      </select></div>
+    </div>
+    <div class="chips" id="chips">
+      <button class="chip" data-tag="Local">Local</button>
+      <button class="chip" data-tag="Partnership">Partnership</button>
+      <button class="chip" data-tag="Kids/Handoff">Kids / Handoff</button>
+      <button class="chip" data-tag="Recurring">Recurring revenue</button>
+      <button class="chip" data-tag="Digital">Fully digital</button>
+      <button class="chip reset" id="reset">Reset all</button>
+      <button class="refresh" id="refresh">↻ Refresh</button>
+    </div>
+    <div class="count" id="count"></div>
+    <div class="sharednote" id="sharednote">▲ Votes and ✎ notes are <b>shared</b> — anyone you send this link to sees the same tallies and notes, and can add to them. Vote as many times as you like.</div>
+  </div>
+
+  <div class="deck" id="deck"></div>
+
+  <div class="footnote">
+    <b>How to read the tags:</b> COST = my estimated cash to start (red = over your $1k cap). TOUCH = ongoing effort once running (Low / Med). AI = how much of the work AI can carry (High / Med / Low). The lowercase pills are the angles you named: Local, Partnership, Kids/Handoff, Recurring, Digital.<br><br>
+    <b>Honest mechanics, same as your other models:</b><br>
+    1 — LOW TOUCH IS EARNED, NOT FREE. "Low ongoing touch" almost always means high UPFRONT touch — the hyperfocus build is where the work lives. AI scales delivery, not the initial setup, positioning, or first customers.<br>
+    2 — "IMMEDIATE INCOME" IS THE EXCEPTION. A few (printables, POD, lead-gen) can sell day one. Most need an audience, a partner, or proof first. Don't confuse "fast to launch" with "fast to revenue."<br>
+    3 — THE HANDOFF VISION IS REAL BUT NEEDS STRUCTURE. Gifting a cash-flowing micro-business to your kids or a non-profit is doable, but earned-income effects on benefits, labor classification, and who owns the IP all need the same specialist counsel flagged in your care-facility work.<br>
+    4 — REGULATED CORNERS. Anything with food (eggs, honey, microgreens, treats), kids' care, health/diet claims, or financial advice carries licensing or liability you must check locally — Michigan cottage-food and home-business rules included.<br>
+    5 — AI-PRODUCT IP &amp; DISCLOSURE. Selling AI-generated stories, art, voices, or text raises ownership, likeness, and disclosure questions that are still shifting. Verify current rules before you sell at volume — don't trust a one-year-old read of the law.
+  </div>
+</div>
+
+<!-- Supabase client library (public CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  /* ============================================================
+     CONFIG — paste your two Supabase values between the quotes.
+     Find them in: Supabase dashboard -> Project Settings ->
+     Data API (and "API Keys"). Use the PUBLIC anon key.
+     Until these are filled in, the page still works but saves
+     votes/notes only on THIS device (not shared).
+     ============================================================ */
+  const SUPABASE_URL  = "https://pcceglfwtlwsqvhhwcbj.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjY2VnbGZ3dGx3c3F2aGh3Y2JqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2Mzg3MDIsImV4cCI6MjA5NjIxNDcwMn0.f1Dmbfre-4eWQNJgIlH4wNUDk52m37RHoqtTJQo6RV8";
+  /* ============================================================ */
+
+  const el=id=>document.getElementById(id);
+  const configured = !/^YOUR_/.test(SUPABASE_URL) && !/^YOUR_/.test(SUPABASE_ANON_KEY) && SUPABASE_URL && SUPABASE_ANON_KEY;
+  let sb=null;
+  if(configured && window.supabase){
+    try{ sb=window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); }catch(e){ sb=null; }
+  }
+
+  // cost: 0=<$100, 1=$100-500, 2=$500-1k, 3=$1k+
+  // x(touch): L/M  |  a(ai): H/M/L  |  g(tags)
+  const CATS={
+    A:'Personalized Kids & Family', B:'Printables & POD', C:'AI Micro-Tools',
+    D:'Content & Audience', E:'AI Services for Local Biz', F:'Local Goods & Garden',
+    G:'Rentals', H:'Info Products & Courses', I:'Subscriptions',
+    J:'Directories & Lead-Gen', K:'Creative & Gifting', L:'Non-Profit & Community',
+    M:'Digital Services', N:'Build-Once Products'
+  };
+
+  const D=[
+    // A — Personalized Kids & Family
+    {t:'Custom bedtime stories',c:'A',b:'AI writes a short story with the child as the hero; deliver as PDF or printed keepsake.',$:0,x:'L',a:'H',g:['Kids/Handoff','Digital','Recurring']},
+    {t:'Personalized coloring books',c:'A',b:'Build a coloring book around a kid’s name, pet, or interests; print-on-demand fulfilment.',$:0,x:'L',a:'H',g:['Kids/Handoff','Digital']},
+    {t:'Name-meaning storybooks',c:'A',b:'A story woven around the meaning and letters of a child’s name.',$:0,x:'L',a:'H',g:['Kids/Handoff','Digital']},
+    {t:'“The day you were born” books',c:'A',b:'Keepsake memory book for new parents built from the birth details they submit.',$:0,x:'L',a:'H',g:['Kids/Handoff','Digital']},
+    {t:'Kids’ affirmation card decks',c:'A',b:'Printed deck of affirmations themed to a child; POD or batch-printed.',$:1,x:'L',a:'M',g:['Kids/Handoff']},
+    {t:'“Big sibling” prep books',c:'A',b:'Custom book preparing a child for a new baby’s arrival, with their name in it.',$:0,x:'L',a:'H',g:['Kids/Handoff','Digital']},
+    {t:'Routine / potty-training guides',c:'A',b:'Illustrated, personalized bedtime or potty routine the child stars in.',$:0,x:'L',a:'H',g:['Kids/Handoff','Digital']},
+    {t:'Birthday poem + poster',c:'A',b:'Custom birthday poem rendered as printable wall art on demand.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'First-words photo books',c:'A',b:'A toddler’s “first dictionary” built from family photos and words.',$:0,x:'L',a:'M',g:['Kids/Handoff','Digital']},
+    {t:'Grandparent legacy books',c:'A',b:'Interview a grandparent; AI shapes answers into a printed family keepsake.',$:1,x:'M',a:'M',g:['Local','Kids/Handoff']},
+    {t:'Neighborhood adventure maps',c:'A',b:'A whimsical illustrated map of a child’s street/town as a print.',$:0,x:'L',a:'H',g:['Local','Digital']},
+    {t:'Santa / Elf letter subscription',c:'A',b:'Seasonal personalized letters mailed or emailed with the kid’s details.',$:0,x:'L',a:'H',g:['Kids/Handoff','Recurring','Digital']},
+    {t:'Party scavenger-hunt kits',c:'A',b:'Custom themed scavenger hunts as instant-download printable kits.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Custom lullaby lyrics',c:'A',b:'AI-written lullaby with a child’s name and simple chord/sheet sheet.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Pet memorial storybooks',c:'A',b:'A gentle illustrated tribute book for a family’s lost pet.',$:0,x:'L',a:'H',g:['Digital']},
+
+    // B — Printables & POD
+    {t:'AuDHD-friendly planners',c:'B',b:'Neurodivergent-designed printable planners from lived experience; sell on Etsy/Gumroad.',$:0,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'Wedding printable packs',c:'B',b:'Signage, seating charts, and games as editable templates.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'AI wall-art collections',c:'B',b:'Themed art sets sold as instant downloads or print-on-demand.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Family recipe-book formatting',c:'B',b:'Turn a family’s recipes into a designed, printable cookbook.',$:0,x:'M',a:'M',g:['Digital']},
+    {t:'Teacher classroom resources',c:'B',b:'Decor, labels, and worksheets sold to teachers (e.g. TPT).',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Budget / finance templates',c:'B',b:'Printable and spreadsheet money trackers for a specific niche.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Custom chore charts',c:'B',b:'Editable kids’ chore and reward charts; personalize on request.',$:0,x:'L',a:'H',g:['Kids/Handoff','Digital']},
+    {t:'Greeting-card design packs',c:'B',b:'Niche card sets via print-on-demand (no inventory).',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Niche sticker & pin designs',c:'B',b:'Hyper-specific sticker/pin designs through a POD partner.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Local-pride apparel',c:'B',b:'Print-on-demand tees for Grand Rapids towns, lakes, and inside jokes.',$:0,x:'L',a:'H',g:['Local','Digital']},
+    {t:'Printable escape-room kits',c:'B',b:'Print-and-play escape rooms for parties and classrooms.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Homeschool supplements',c:'B',b:'Unit studies and worksheet packs sold to homeschooling parents.',$:0,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'Themed wallpaper packs',c:'B',b:'Phone/desktop wallpaper sets sold as digital bundles.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Notion / template shop',c:'B',b:'Sell productivity and business templates as one-time digital goods.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Journaling prompt decks',c:'B',b:'Printable or boxed prompt cards for a specific audience.',$:1,x:'L',a:'M',g:['Digital']},
+
+    // C — AI Micro-Tools
+    {t:'Wedding vow generator',c:'C',b:'A single-purpose AI tool that drafts personalized vows; freemium.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Business-name + domain tool',c:'C',b:'Generates names and checks domain availability for founders.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Industry resume tailor',c:'C',b:'Resume-tailoring tool for one field (nursing, trades, tech).',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Etsy listing writer',c:'C',b:'Generates SEO listing titles and descriptions for sellers.',$:1,x:'L',a:'H',g:['Digital','Recurring']},
+    {t:'Restaurant menu describer',c:'C',b:'Turns dish names into appetizing menu copy for restaurants.',$:1,x:'L',a:'H',g:['Partnership','Digital']},
+    {t:'Grant matcher for non-profits',c:'C',b:'Helps small charities find and match to relevant grants.',$:1,x:'M',a:'H',g:['Partnership','Digital']},
+    {t:'Niche cover-letter tool',c:'C',b:'Field-specific cover-letter generator with templates.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Meeting-to-actions tool',c:'C',b:'Converts notes/transcripts into action items for a niche team.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Industry caption generator',c:'C',b:'Social caption tool for one vertical (salons, realtors, gyms).',$:1,x:'L',a:'H',g:['Partnership','Digital','Recurring']},
+    {t:'Product-photo styler',c:'C',b:'Cleans up and styles seller product photos automatically.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Chatbot setup for local biz',c:'C',b:'Build and install a simple AI assistant on SMB websites.',$:1,x:'M',a:'H',g:['Local','Partnership']},
+    {t:'FAQ-page generator',c:'C',b:'Spins a business’s info into a polished FAQ page.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Niche email-sequence writer',c:'C',b:'Drafts onboarding/nurture email flows for one industry.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Custom assistant building',c:'C',b:'Build tailored AI assistants for local businesses, done-for-you.',$:1,x:'M',a:'H',g:['Local','Partnership']},
+    {t:'Review-response generator',c:'C',b:'Drafts on-brand replies to customer reviews for SMBs.',$:1,x:'L',a:'H',g:['Partnership','Digital','Recurring']},
+
+    // D — Content & Audience
+    {t:'Hyper-local newsletter',c:'D',b:'A Grand Rapids events/deals newsletter monetized by sponsors.',$:0,x:'M',a:'M',g:['Local','Recurring']},
+    {t:'Faceless YouTube channel',c:'D',b:'AI-scripted, AI-voiced niche channel monetized by ads/affiliate.',$:0,x:'M',a:'H',g:['Digital']},
+    {t:'Short-form affiliate account',c:'D',b:'Reels/TikTok in a niche driving affiliate links.',$:0,x:'M',a:'H',g:['Digital']},
+    {t:'Curated niche newsletter',c:'D',b:'E.g. Michigan outdoor-gear deals; affiliate + sponsorship.',$:0,x:'M',a:'M',g:['Recurring','Digital']},
+    {t:'Automated email mini-course',c:'D',b:'A 5-day email course that sells on autopilot.',$:0,x:'L',a:'H',g:['Digital','Recurring']},
+    {t:'Niche Pinterest affiliate',c:'D',b:'Pin curation driving traffic to affiliate offers.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'“Best of GR” local blog',c:'D',b:'Local roundup blog earning via local ads and affiliate.',$:0,x:'M',a:'M',g:['Local','Digital']},
+    {t:'Playlist curation + sponsor',c:'D',b:'Build followed Spotify playlists and sell placements.',$:0,x:'L',a:'L',g:['Digital','Recurring']},
+    {t:'Public-domain audiobooks',c:'D',b:'AI-narrate out-of-copyright works and sell/monetize.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Paid Substack niche',c:'D',b:'Deep niche newsletter with a paid subscriber tier.',$:0,x:'M',a:'M',g:['Recurring','Digital']},
+    {t:'Quiz-funnel sites',c:'D',b:'Personality/style quizzes feeding email lists and affiliate.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Quote/meme → merch',c:'D',b:'Grow a themed account, sell POD merch to the audience.',$:0,x:'M',a:'M',g:['Digital']},
+    {t:'Local nostalgia account',c:'D',b:'“Old Grand Rapids” history content → book or merch.',$:0,x:'M',a:'M',g:['Local','Digital']},
+    {t:'Satisfying/how-it’s-made channel',c:'D',b:'Faceless visual content monetized by ad revenue.',$:0,x:'M',a:'H',g:['Digital']},
+    {t:'AI daily trivia newsletter',c:'D',b:'Automated trivia/quiz email with sponsor slots.',$:0,x:'L',a:'H',g:['Recurring','Digital']},
+
+    // E — AI Services for Local Biz
+    {t:'Google Business optimization',c:'E',b:'Set up and optimize Google profiles for local shops.',$:0,x:'M',a:'M',g:['Local','Partnership']},
+    {t:'Reputation / review setup',c:'E',b:'Install review-request systems for local service businesses.',$:0,x:'L',a:'M',g:['Local','Partnership','Recurring']},
+    {t:'Templated local SEO audits',c:'E',b:'AI-assisted SEO audit reports sold to small businesses.',$:0,x:'L',a:'H',g:['Local','Partnership']},
+    {t:'Monthly content packs',c:'E',b:'Sell a monthly social-content bundle to one local niche.',$:0,x:'M',a:'H',g:['Local','Partnership','Recurring']},
+    {t:'Real-estate photo enhancing',c:'E',b:'AI cleanup/staging of listing photos for agents.',$:1,x:'L',a:'H',g:['Local','Partnership','Recurring']},
+    {t:'Restaurant flyer subscription',c:'E',b:'Monthly menu/special flyers and posts for eateries.',$:0,x:'M',a:'H',g:['Local','Partnership','Recurring']},
+    {t:'Appointment-reminder setup',c:'E',b:'Install automated reminders for salons/clinics.',$:0,x:'L',a:'M',g:['Local','Partnership','Recurring']},
+    {t:'Website-in-a-day for trades',c:'E',b:'Fast simple sites for landscapers, tree services, contractors.',$:1,x:'M',a:'M',g:['Local','Partnership']},
+    {t:'Non-profit newsletter mgmt',c:'E',b:'Run the email program for small local charities.',$:0,x:'M',a:'H',g:['Local','Partnership','Recurring']},
+    {t:'Blog-content subscription',c:'E',b:'AI-written, human-edited blog posts on retainer.',$:0,x:'M',a:'H',g:['Partnership','Recurring']},
+    {t:'Faceless UGC ad creation',c:'E',b:'Produce short ad creatives for small e-commerce brands.',$:1,x:'M',a:'H',g:['Partnership','Recurring']},
+    {t:'Build a local directory',c:'E',b:'Own a niche local directory and sell business listings.',$:0,x:'L',a:'M',g:['Local','Recurring']},
+    {t:'QR menu / ordering setup',c:'E',b:'Set up QR-code menus and ordering for cafés.',$:1,x:'L',a:'M',g:['Local','Partnership']},
+    {t:'Loyalty-program setup',c:'E',b:'Install simple punch/points programs for local shops.',$:1,x:'L',a:'M',g:['Local','Partnership','Recurring']},
+    {t:'Contractor lead-capture bot',c:'E',b:'Add a quote/lead chatbot to contractor sites.',$:1,x:'L',a:'H',g:['Local','Partnership','Recurring']},
+
+    // F — Local Goods & Garden
+    {t:'Cut-flower stand / subscription',c:'F',b:'Grow and sell bouquets; weekly subscription option.',$:1,x:'M',a:'L',g:['Local','Recurring']},
+    {t:'Microgreens for restaurants',c:'F',b:'Grow microgreens and sell wholesale to local kitchens.',$:1,x:'M',a:'L',g:['Local','Partnership','Recurring']},
+    {t:'Firewood bundling + delivery',c:'F',b:'Split, bundle, and deliver firewood (ties to a log splitter).',$:2,x:'M',a:'L',g:['Local']},
+    {t:'Seasonal porch planters',c:'F',b:'Make and sell/refresh seasonal container arrangements.',$:1,x:'M',a:'L',g:['Local','Recurring']},
+    {t:'Backyard honey',c:'F',b:'Sell honey from a few hives locally (check food rules).',$:2,x:'L',a:'L',g:['Local','Recurring']},
+    {t:'Specialty mushrooms',c:'F',b:'Grow oyster/lion’s-mane mushrooms for restaurants and markets.',$:2,x:'M',a:'L',g:['Local','Partnership','Recurring']},
+    {t:'Engraved wood signs',c:'F',b:'Laser-cut/engraved custom signs from AI-made designs (laser is $1k+).',$:3,x:'M',a:'M',g:['Local']},
+    {t:'Small-batch soap / candles',c:'F',b:'A tight local soap/candle line sold at markets and online.',$:1,x:'M',a:'L',g:['Local']},
+    {t:'Native seed-bomb kits',c:'F',b:'Assemble and sell native-plant seed kits.',$:0,x:'L',a:'L',g:['Local']},
+    {t:'Pastured eggs',c:'F',b:'Sell backyard eggs locally (check Michigan rules).',$:1,x:'M',a:'L',g:['Local','Recurring']},
+    {t:'Compost / worm castings',c:'F',b:'Sell finished compost or castings to local gardeners.',$:1,x:'L',a:'L',g:['Local','Recurring']},
+    {t:'Pressed-flower art',c:'F',b:'Framed botanical art from foraged/grown flowers.',$:1,x:'M',a:'L',g:['Local']},
+    {t:'Engraved pet ID tags',c:'F',b:'Custom pet tags engraved on demand.',$:2,x:'L',a:'M',g:['Local']},
+    {t:'New-neighbor gift baskets',c:'F',b:'Curated local-business baskets sold to realtors/movers.',$:1,x:'M',a:'L',g:['Local','Partnership']},
+    {t:'Seasonal produce stand',c:'F',b:'Roadside pumpkins/produce; low-tech, seasonal cash.',$:1,x:'M',a:'L',g:['Local']},
+
+    // G — Rentals
+    {t:'Party prop rentals',c:'G',b:'Balloon arches, backdrops, and decor for events.',$:2,x:'M',a:'L',g:['Local','Recurring']},
+    {t:'Travel baby-gear rental',c:'G',b:'Rent cribs/strollers to visiting families.',$:2,x:'M',a:'L',g:['Local','Recurring']},
+    {t:'Yard-game rentals',c:'G',b:'Giant Jenga, cornhole, and lawn games for events.',$:1,x:'L',a:'L',g:['Local','Recurring']},
+    {t:'Self-service photo booth',c:'G',b:'A photo booth unit rented for parties/weddings ($1k+).',$:3,x:'L',a:'L',g:['Local','Recurring']},
+    {t:'Camping-gear rental',c:'G',b:'Tents and outdoor kit rented for weekend trips.',$:2,x:'M',a:'L',g:['Local','Recurring']},
+    {t:'Backyard-movie kit rental',c:'G',b:'Projector + screen + speaker package for outdoor nights.',$:2,x:'L',a:'L',g:['Local','Recurring']},
+    {t:'Table & chair rental',c:'G',b:'Folding tables/chairs for small local events.',$:2,x:'L',a:'L',g:['Local','Recurring']},
+    {t:'Specialty tool lending',c:'G',b:'Rent out a small set of specialty tools by the day.',$:2,x:'L',a:'L',g:['Local','Recurring']},
+    {t:'Bounce-house rental',c:'G',b:'One inflatable rented for parties (unit is $1k+).',$:3,x:'M',a:'L',g:['Local','Recurring']},
+    {t:'Lawn-greeting sign rental',c:'G',b:'“Happy Birthday” yard-letter setups, placed and removed.',$:1,x:'M',a:'L',g:['Local','Recurring']},
+    {t:'Kayak / paddleboard rental',c:'G',b:'Rent watercraft near local lakes (seasonal).',$:3,x:'M',a:'L',g:['Local','Recurring']},
+    {t:'Snowblower rental',c:'G',b:'Seasonal Michigan snow-clearing equipment rental.',$:3,x:'L',a:'L',g:['Local','Recurring']},
+    {t:'Pressure-washer rental',c:'G',b:'Rent a washer with a how-to; low maintenance.',$:2,x:'L',a:'L',g:['Local','Recurring']},
+    {t:'Carnival-game rental',c:'G',b:'Dunk tanks and games rented to school/church fundraisers.',$:3,x:'M',a:'L',g:['Local','Partnership']},
+    {t:'Folding-canopy / tent rental',c:'G',b:'Pop-up canopies for markets and backyard events.',$:2,x:'L',a:'L',g:['Local','Recurring']},
+
+    // H — Info Products & Courses
+    {t:'Micro-course on your skill',c:'H',b:'Package a hyperfocus skill into a short paid course.',$:0,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'Paid niche community',c:'H',b:'A Skool/Discord community with a monthly fee.',$:0,x:'M',a:'L',g:['Recurring','Digital']},
+    {t:'SOP / template packs',c:'H',b:'Sell ready-made standard operating procedures for a niche.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Laminated cheat-sheets',c:'H',b:'Reference cards for a trade or hobby; print and ship.',$:1,x:'L',a:'M',g:['Digital']},
+    {t:'Notion second-brain templates',c:'H',b:'Sell a structured knowledge system for a profession.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'AuDHD productivity system',c:'H',b:'Your lived system, packaged as a paid toolkit/course.',$:0,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'“Moving to Grand Rapids” guide',c:'H',b:'A relocation guide sold to newcomers; update yearly.',$:0,x:'L',a:'M',g:['Local','Digital']},
+    {t:'Niche meal-plan product',c:'H',b:'Themed meal plans + grocery lists as a digital product.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Homeschool unit studies',c:'H',b:'Sell themed multi-week study packs to homeschoolers.',$:0,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'Wedding-planning timeline',c:'H',b:'A done-for-you planning workbook couples buy.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Trade-exam study guides',c:'H',b:'Study packs for licensing exams (electrician, HVAC).',$:0,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'Narrow phrasebooks',c:'H',b:'Hyper-specific language phrasebooks for travelers/workers.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Investor spreadsheet templates',c:'H',b:'Sell the kind of deal models you already build.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Side-hustle starter kits',c:'H',b:'Templated launch kits for specific small businesses.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Breed-specific pet guides',c:'H',b:'Care guides for one breed, sold to new owners.',$:0,x:'L',a:'H',g:['Digital']},
+
+    // I — Subscriptions
+    {t:'Kids’ activity-printable box',c:'I',b:'Monthly themed printable activity pack subscription.',$:0,x:'L',a:'H',g:['Kids/Handoff','Recurring','Digital']},
+    {t:'Date-night idea kit',c:'I',b:'Monthly digital or boxed date-night prompts and plans.',$:1,x:'L',a:'M',g:['Recurring']},
+    {t:'Story-of-the-month',c:'I',b:'A new personalized story for a child every month.',$:0,x:'L',a:'H',g:['Kids/Handoff','Recurring','Digital']},
+    {t:'Bar trivia-night kit',c:'I',b:'Monthly trivia packs sold to bars and venues.',$:0,x:'L',a:'H',g:['Local','Partnership','Recurring']},
+    {t:'Social-calendar subscription',c:'I',b:'Monthly content calendar for one industry.',$:0,x:'L',a:'H',g:['Partnership','Recurring','Digital']},
+    {t:'Niche book-of-the-month',c:'I',b:'Curated monthly picks + notes for a niche audience.',$:1,x:'L',a:'M',g:['Recurring']},
+    {t:'Coloring-page subscription',c:'I',b:'Fresh themed coloring pages delivered monthly.',$:0,x:'L',a:'H',g:['Kids/Handoff','Recurring','Digital']},
+    {t:'D&D campaign packs',c:'I',b:'Monthly AI-built tabletop adventures for game masters.',$:0,x:'L',a:'H',g:['Recurring','Digital']},
+    {t:'Affirmation / prompt drop',c:'I',b:'Monthly journal-prompt or affirmation set by subscription.',$:0,x:'L',a:'H',g:['Recurring','Digital']},
+    {t:'Church bulletin design',c:'I',b:'Weekly/monthly bulletin and slide design for congregations.',$:0,x:'M',a:'M',g:['Local','Partnership','Recurring']},
+    {t:'Meal-prep printable subscription',c:'I',b:'Monthly meal-prep sheets + shopping lists.',$:0,x:'L',a:'H',g:['Recurring','Digital']},
+    {t:'Local pet-treat box',c:'I',b:'Monthly treat box using local suppliers (check food rules).',$:2,x:'M',a:'L',g:['Local','Recurring']},
+    {t:'Garden-task subscription',c:'I',b:'Seasonal monthly garden checklists and guides.',$:0,x:'L',a:'H',g:['Recurring','Digital']},
+    {t:'“Letters from a character”',c:'I',b:'Monthly in-character letters mailed to a child.',$:1,x:'L',a:'H',g:['Kids/Handoff','Recurring']},
+    {t:'Newsletter sponsor slots',c:'I',b:'Own a list and sell recurring sponsorship placements.',$:0,x:'L',a:'M',g:['Recurring','Digital']},
+
+    // J — Directories & Lead-Gen
+    {t:'Niche local directory',c:'J',b:'Food trucks or wedding vendors directory with paid listings.',$:0,x:'L',a:'M',g:['Local','Recurring']},
+    {t:'Trade lead-gen site',c:'J',b:'Rank a local-service site and sell the leads to contractors.',$:1,x:'M',a:'M',g:['Local','Partnership','Recurring']},
+    {t:'Niche job board',c:'J',b:'A focused job board charging employers to post.',$:0,x:'L',a:'M',g:['Recurring','Digital']},
+    {t:'“Best near me” site',c:'J',b:'Affiliate/lead site for a specific local service.',$:0,x:'L',a:'M',g:['Local','Digital']},
+    {t:'Organized public-data product',c:'J',b:'Package useful public data cleanly (mind the legal lines).',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Sponsorship brokering',c:'J',b:'Connect small creators with newsletter/podcast sponsors for a cut.',$:0,x:'M',a:'M',g:['Partnership','Recurring']},
+    {t:'Brand-name research service',c:'J',b:'Name + domain + trademark-check research for founders.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Local deal aggregator',c:'J',b:'Collect local coupons/deals; monetize via featured slots.',$:0,x:'M',a:'M',g:['Local','Recurring']},
+    {t:'Niche event-listing site',c:'J',b:'Events hub for a local scene, funded by sponsorships.',$:0,x:'M',a:'M',g:['Local','Recurring']},
+    {t:'Vendor matchmaking',c:'J',b:'Match buyers and suppliers in a niche for a referral fee.',$:0,x:'M',a:'M',g:['Partnership','Recurring']},
+
+    // K — Creative & Gifting
+    {t:'Custom AI portrait art',c:'K',b:'Stylized pet/family/wedding portraits delivered as prints.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Personalized jingles',c:'K',b:'AI-assisted custom songs for gifts and small businesses.',$:1,x:'L',a:'H',g:['Digital']},
+    {t:'Vows / toasts / eulogy writing',c:'K',b:'Heartfelt custom speeches written to order.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Photo-to-puzzle gifts',c:'K',b:'Turn a customer photo into a printed jigsaw via POD.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Star-map / birth-night prints',c:'K',b:'Custom sky maps for a meaningful date and place.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Old-photo restoration',c:'K',b:'AI-restore and colorize damaged family photos.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Couple’s story comic',c:'K',b:'A short illustrated comic of how a couple met.',$:0,x:'M',a:'H',g:['Digital']},
+    {t:'Custom advent calendars',c:'K',b:'Personalized printable or boxed advent countdowns.',$:1,x:'L',a:'M',g:['Kids/Handoff']},
+    {t:'Family crest / monogram',c:'K',b:'Custom crest and monogram designs as prints/files.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Memory-book from socials',c:'K',b:'Compile someone’s social posts into a printed book.',$:1,x:'M',a:'M',g:['Digital']},
+    {t:'Custom kids’ placemats',c:'K',b:'Educational, wipeable placemats personalized per child.',$:1,x:'L',a:'M',g:['Kids/Handoff']},
+    {t:'Growth-chart wall art',c:'K',b:'Personalized printable/printed height charts.',$:0,x:'L',a:'H',g:['Kids/Handoff','Digital']},
+    {t:'“Where we met” map art',c:'K',b:'Custom map prints of meaningful locations.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Voice-message keepsakes',c:'K',b:'Turn a saved voicemail into transcribed, designed art.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Custom comic avatars',c:'K',b:'Stylized avatar sets for individuals or small teams.',$:0,x:'L',a:'H',g:['Digital']},
+
+    // L — Non-Profit & Community
+    {t:'Fundraiser merch design',c:'L',b:'Design and run POD merch stores for non-profits.',$:0,x:'L',a:'H',g:['Local','Partnership','Kids/Handoff']},
+    {t:'Donation-page setup',c:'L',b:'Build and configure donation/campaign pages for charities.',$:0,x:'L',a:'M',g:['Partnership']},
+    {t:'AI-assisted grant writing',c:'L',b:'Draft and edit grant applications for local orgs.',$:0,x:'M',a:'H',g:['Local','Partnership']},
+    {t:'Community cookbook publishing',c:'L',b:'Compile and publish group cookbooks as fundraisers.',$:1,x:'M',a:'M',g:['Local','Partnership']},
+    {t:'School-spirit store',c:'L',b:'A POD spirit-wear shop you can hand to a PTA.',$:0,x:'L',a:'M',g:['Local','Partnership','Kids/Handoff','Recurring']},
+    {t:'Engraved-paver fundraising',c:'L',b:'Run memorial brick/paver campaigns for institutions.',$:1,x:'M',a:'L',g:['Local','Partnership']},
+    {t:'Charity auction setup',c:'L',b:'Build catalogs and run logistics for benefit auctions.',$:0,x:'M',a:'M',g:['Local','Partnership']},
+    {t:'Community event photography',c:'L',b:'Shoot local events; train volunteers to take it over.',$:1,x:'M',a:'L',g:['Local','Kids/Handoff']},
+    {t:'Mutual-aid resource directory',c:'L',b:'Maintain a local help/resource directory, grant-funded.',$:0,x:'M',a:'M',g:['Local','Partnership']},
+    {t:'Sensory-friendly event kits',c:'L',b:'Your AuDHD lens: kits libraries/orgs use for inclusive events.',$:1,x:'L',a:'M',g:['Local','Partnership','Kids/Handoff']},
+    {t:'Little-free-library program',c:'L',b:'Build, stock, and sponsor neighborhood book boxes.',$:1,x:'L',a:'L',g:['Local','Kids/Handoff']},
+    {t:'Garden-plot mgmt tool',c:'L',b:'Templates/software to run community garden plots.',$:0,x:'L',a:'M',g:['Local','Partnership']},
+    {t:'Volunteer-scheduling templates',c:'L',b:'Ready-made scheduling systems sold to non-profits.',$:0,x:'L',a:'H',g:['Partnership','Digital']},
+    {t:'Faith-org media design',c:'L',b:'Bulletins, slides, and social for congregations on retainer.',$:0,x:'M',a:'M',g:['Local','Partnership','Recurring']},
+    {t:'Senior-center activity kits',c:'L',b:'Your intergen interest: monthly engagement kits for centers.',$:1,x:'L',a:'M',g:['Local','Partnership','Recurring']},
+
+    // M — Digital Services
+    {t:'Resume / LinkedIn refresh',c:'M',b:'AI-assisted profile and resume makeovers, fixed price.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Podcast editing + notes',c:'M',b:'AI-assisted editing and show-notes micro-agency.',$:1,x:'M',a:'H',g:['Partnership','Recurring']},
+    {t:'Transcription + summaries',c:'M',b:'Niche transcription and summary service.',$:0,x:'L',a:'H',g:['Digital','Recurring']},
+    {t:'Webinar / virtual-event setup',c:'M',b:'Tech and logistics setup for online events.',$:0,x:'M',a:'M',g:['Partnership']},
+    {t:'eBook ghostwriting / formatting',c:'M',b:'AI-assisted drafting and formatting for self-publishers.',$:0,x:'M',a:'H',g:['Digital']},
+    {t:'KDP low-content books',c:'M',b:'Journals, logbooks, planners self-published on Amazon.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'KDP puzzle/activity books',c:'M',b:'Crosswords, sudoku, and activity books generated at scale.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'AI-image licensing portfolio',c:'M',b:'Build and license a stock-image/AI-art portfolio.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Sound / loop packs',c:'M',b:'Royalty-free music loops and SFX packs for creators.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Font / design-asset sales',c:'M',b:'Create and sell fonts, icons, and design assets.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Voiceover service',c:'M',b:'Your voice or a disclosed AI voice for short projects.',$:0,x:'L',a:'H',g:['Digital','Recurring']},
+    {t:'Localization micro-service',c:'M',b:'AI translation with native-speaker review for a niche.',$:0,x:'M',a:'H',g:['Digital']},
+    {t:'Niche proofreading',c:'M',b:'Proofreading for academics or self-publishers.',$:0,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'Captioning / subtitles',c:'M',b:'AI-assisted captions and subtitles for video creators.',$:0,x:'L',a:'H',g:['Digital','Recurring']},
+    {t:'Pitch-deck design',c:'M',b:'Polished slide decks for founders and small businesses.',$:0,x:'M',a:'H',g:['Partnership']},
+
+    // N — Build-Once Products
+    {t:'No-code niche app',c:'N',b:'Build a small mobile app for a niche; ads or subscription.',$:1,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'Niche browser extension',c:'N',b:'A single-purpose extension on a freemium model.',$:0,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'Game-asset packs',c:'N',b:'Sprites, tilesets, and assets sold to indie game devs.',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Calculator / tool products',c:'N',b:'Sell standalone interactive calculators (your strength).',$:0,x:'L',a:'M',g:['Digital']},
+    {t:'Theme / plugin for a niche',c:'N',b:'A WordPress/Shopify theme or plugin sold once or by license.',$:1,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'AI prompt packs',c:'N',b:'Curated prompt libraries for a specific profession.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Automation templates',c:'N',b:'Airtable/Zapier/Make templates sold to a niche.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Canva template shop',c:'N',b:'Sell editable Canva templates for a vertical.',$:0,x:'L',a:'H',g:['Digital','Recurring']},
+    {t:'Digital sticker packs',c:'N',b:'iMessage/WhatsApp sticker sets sold in-store.',$:0,x:'L',a:'H',g:['Digital']},
+    {t:'Niche data feed / API',c:'N',b:'Build a useful data feed once, charge for access.',$:1,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'Spreadsheet add-on',c:'N',b:'A Google Sheets/Excel add-on solving one niche problem.',$:1,x:'L',a:'M',g:['Digital','Recurring']},
+    {t:'Lightweight SaaS wrapper',c:'N',b:'Wrap an AI capability into a tidy paid micro-product.',$:1,x:'M',a:'H',g:['Digital','Recurring']},
+    {t:'Printable-generator site',c:'N',b:'A site that auto-generates custom printables on demand.',$:1,x:'L',a:'H',g:['Digital','Recurring']},
+    {t:'Niche directory plugin',c:'N',b:'Build a reusable directory product for many local markets.',$:1,x:'L',a:'M',g:['Local','Digital','Recurring']},
+    {t:'Reusable quiz engine',c:'N',b:'A quiz-funnel template you redeploy across niches.',$:1,x:'L',a:'H',g:['Digital','Recurring']}
+  ];
+
+  const COSTLBL=['<$100','$100–500','$500–1k','$1k+'];
+  const TOUCHLBL={L:'Low touch',M:'Med touch'};
+  const AILBL={H:'AI: High',M:'AI: Med',L:'AI: Low'};
+
+  // build category dropdown
+  const catSel=el('cat');
+  catSel.innerHTML='<option value="">All categories</option>'+Object.keys(CATS).map(k=>`<option value="${k}">${CATS[k]}</option>`).join('');
+
+  let activeTags=new Set();
+
+  // stable per-idea id (category + slug of title)
+  const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  D.forEach(d=>{ d.id=d.c+'-'+slug(d.t); });
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  // ---- shared, cross-viewer state ----
+  // VOTES: { idea_id: count }   NOTES: { idea_id: [ {body, created_at} ... ] }
+  let VOTES={}, NOTES={};
+  const LS_V='idea-bank-votes-local', LS_N='idea-bank-notes-local';
+
+  function loadLocal(){
+    try{ VOTES=JSON.parse(localStorage.getItem(LS_V))||{}; }catch(e){ VOTES={}; }
+    try{ NOTES=JSON.parse(localStorage.getItem(LS_N))||{}; }catch(e){ NOTES={}; }
+  }
+  function saveLocal(){
+    try{ localStorage.setItem(LS_V,JSON.stringify(VOTES)); localStorage.setItem(LS_N,JSON.stringify(NOTES)); }catch(e){}
+  }
+
+  async function loadState(){
+    if(!sb){ loadLocal(); return; }
+    try{
+      const {data:vrows,error:ve}=await sb.from('votes').select('idea_id,count');
+      if(ve) throw ve;
+      VOTES={}; (vrows||[]).forEach(r=>{ VOTES[r.idea_id]=r.count; });
+      const {data:nrows,error:ne}=await sb.from('notes').select('idea_id,body,created_at').order('created_at',{ascending:true});
+      if(ne) throw ne;
+      NOTES={}; (nrows||[]).forEach(r=>{ (NOTES[r.idea_id]=NOTES[r.idea_id]||[]).push({body:r.body,created_at:r.created_at}); });
+      setBanner('ok');
+    }catch(e){
+      setBanner('error', e && e.message ? e.message : 'connection problem');
+    }
+  }
+
+  // refresh just the vote tallies without disturbing open note panels / typing
+  async function refreshVotes(){
+    if(!sb) return;
+    try{
+      const {data:vrows,error}=await sb.from('votes').select('idea_id,count');
+      if(error) return;
+      VOTES={}; (vrows||[]).forEach(r=>{ VOTES[r.idea_id]=r.count; });
+      document.querySelectorAll('.vote[data-vote]').forEach(b=>{
+        const id=b.dataset.vote, v=VOTES[id]||0;
+        const vn=b.querySelector('.vn'); if(vn) vn.textContent=v;
+        b.classList.toggle('hot', v>0);
+      });
+    }catch(e){}
+  }
+
+  function relTime(iso){
+    if(!iso) return '';
+    const d=new Date(iso), now=new Date(), s=Math.round((now-d)/1000);
+    if(isNaN(s)) return '';
+    if(s<60) return 'just now';
+    const m=Math.round(s/60); if(m<60) return m+'m ago';
+    const h=Math.round(m/60); if(h<24) return h+'h ago';
+    const days=Math.round(h/24); if(days<30) return days+'d ago';
+    return d.toLocaleDateString();
+  }
+
+  function notesHtml(id){
+    const arr=NOTES[id]||[];
+    if(!arr.length) return '<div class="noteempty">No notes yet — be the first.</div>';
+    return '<div class="notelist">'+arr.map(n=>
+      `<div class="noteitem">${esc(n.body)}<span class="notetime">${esc(relTime(n.created_at))}</span></div>`
+    ).join('')+'</div>';
+  }
+
+  function card(d,i){
+    const over=d.$===3;
+    const gtags=d.g.map(t=>`<span class="tag g">${t}</span>`).join('');
+    const v=VOTES[d.id]||0, n=(NOTES[d.id]||[]).length;
+    return `<div class="card" data-card="${d.id}">
+      <div class="top"><span class="num">${String(i+1).padStart(3,'0')}</span><span class="catpill">${CATS[d.c]}</span></div>
+      <h3>${d.t}</h3>
+      <div class="blurb">${d.b}</div>
+      <div class="meta">
+        <span class="tag cost${over?' over':''}">${COSTLBL[d.$]}</span>
+        <span class="tag touch">${TOUCHLBL[d.x]}</span>
+        <span class="tag ai">${AILBL[d.a]}</span>
+        ${gtags}
+      </div>
+      <div class="acts">
+        <button class="vote${v>0?' hot':''}" data-vote="${d.id}">▲ <span class="vn">${v}</span></button>
+        <button class="notebtn${n?' has':''}" data-note="${d.id}">✎ Notes${n?' ('+n+')':''}</button>
+      </div>
+      <div class="notewrap" data-nw="${d.id}" style="display:none">
+        <div class="noteshere" data-nh="${d.id}">${notesHtml(d.id)}</div>
+        <textarea class="notein" data-id="${d.id}" placeholder="Add a note for everyone…"></textarea>
+        <div class="noterow"><button class="notesave" data-save="${d.id}">Add note</button><span class="notestat" data-stat="${d.id}"></span></div>
+      </div>
+    </div>`;
+  }
+
+  function render(){
+    const q=el('q').value.trim().toLowerCase();
+    const cat=el('cat').value, cost=el('cost').value, touch=el('touch').value, ai=el('ai').value, sort=el('sort').value;
+    let list=[];
+    D.forEach((d,i)=>{
+      if(q && !(d.t.toLowerCase().includes(q)||d.b.toLowerCase().includes(q))) return;
+      if(cat && d.c!==cat) return;
+      if(cost!=='' && d.$!==+cost) return;
+      if(touch && d.x!==touch) return;
+      if(ai && d.a!==ai) return;
+      for(const t of activeTags){ if(!d.g.includes(t)) return; }
+      list.push({d,i});
+    });
+    if(sort==='votes') list.sort((a,b)=>(VOTES[b.d.id]||0)-(VOTES[a.d.id]||0));
+    else if(sort==='notes') list.sort((a,b)=>(((NOTES[b.d.id]||[]).length?1:0)-((NOTES[a.d.id]||[]).length?1:0)));
+    el('deck').innerHTML = list.length? list.map(o=>card(o.d,o.i)).join('') : '<div class="empty">No ideas match those filters. Loosen one and try again.</div>';
+    el('count').textContent='Showing '+list.length+' of '+D.length+' ideas';
+  }
+
+  ['q','cat','cost','touch','ai','sort'].forEach(id=>el(id).addEventListener('input',render));
+  document.querySelectorAll('.chip[data-tag]').forEach(b=>b.addEventListener('click',()=>{
+    const t=b.dataset.tag;
+    if(activeTags.has(t)){activeTags.delete(t);b.classList.remove('on');}
+    else{activeTags.add(t);b.classList.add('on');}
+    render();
+  }));
+  el('reset').addEventListener('click',()=>{
+    el('q').value='';el('cat').value='';el('cost').value='';el('touch').value='';el('ai').value='';el('sort').value='default';
+    activeTags.clear();document.querySelectorAll('.chip[data-tag]').forEach(b=>b.classList.remove('on'));
+    render();
+  });
+  el('refresh').addEventListener('click',async()=>{
+    const btn=el('refresh'); const old=btn.textContent; btn.textContent='↻ …';
+    await loadState(); render(); btn.textContent=old;
+  });
+
+  // delegated handlers — survive re-render
+  el('deck').addEventListener('click',async e=>{
+    // VOTE
+    const vb=e.target.closest('[data-vote]');
+    if(vb){
+      const id=vb.dataset.vote;
+      VOTES[id]=(VOTES[id]||0)+1;                 // optimistic
+      vb.classList.add('hot');
+      const vn=vb.querySelector('.vn'); if(vn) vn.textContent=VOTES[id];
+      if(!sb){ saveLocal(); return; }
+      try{
+        const {data,error}=await sb.rpc('increment_vote',{p_idea_id:id});
+        if(!error && typeof data==='number'){ VOTES[id]=data; if(vn) vn.textContent=data; }
+      }catch(err){}
+      return;
+    }
+    // TOGGLE NOTE PANEL
+    const nb=e.target.closest('[data-note]');
+    if(nb){
+      const w=el('deck').querySelector('[data-nw="'+CSS.escape(nb.dataset.note)+'"]');
+      if(w) w.style.display = w.style.display==='none' ? 'block' : 'none';
+      return;
+    }
+    // ADD NOTE
+    const sbn=e.target.closest('[data-save]');
+    if(sbn){
+      const id=sbn.dataset.save;
+      const ta=el('deck').querySelector('.notein[data-id="'+CSS.escape(id)+'"]');
+      const val=ta?ta.value.trim():'';
+      const stat=el('deck').querySelector('[data-stat="'+CSS.escape(id)+'"]');
+      if(!val){ if(stat){stat.textContent='write something first'; setTimeout(()=>{stat.textContent='';},1800);} return; }
+      sbn.disabled=true;
+      const entry={body:val, created_at:new Date().toISOString()};
+      if(sb){
+        try{
+          const {error}=await sb.from('notes').insert({idea_id:id, body:val});
+          if(error) throw error;
+        }catch(err){
+          sbn.disabled=false;
+          if(stat){stat.textContent='couldn’t save — try again'; setTimeout(()=>{stat.textContent='';},2500);}
+          return;
+        }
+      }
+      (NOTES[id]=NOTES[id]||[]).push(entry);
+      if(!sb) saveLocal();
+      // update this card's note list + button badge, clear box
+      const here=el('deck').querySelector('[data-nh="'+CSS.escape(id)+'"]');
+      if(here) here.innerHTML=notesHtml(id);
+      if(ta) ta.value='';
+      const btn=el('deck').querySelector('[data-note="'+CSS.escape(id)+'"]');
+      const n=NOTES[id].length;
+      if(btn){ btn.classList.add('has'); btn.innerHTML='✎ Notes ('+n+')'; }
+      sbn.disabled=false;
+      if(stat){ stat.textContent='added ✓'; setTimeout(()=>{stat.textContent='';},2000); }
+      return;
+    }
+  });
+
+  // ---- connection banner ----
+  function setBanner(state, msg){
+    const b=el('banner');
+    if(state==='unconfigured'){
+      b.className='banner warn'; b.style.display='block';
+      b.innerHTML='<b>Not connected yet.</b> Votes &amp; notes are saving only on <b>this device</b>. To make them shared, open <code>index.html</code> and paste your Supabase URL + anon key into the CONFIG block near the bottom (see the README). ';
+    } else if(state==='ok'){
+      b.className='banner ok'; b.style.display='block';
+      b.innerHTML='✓ Connected — votes &amp; notes are shared with everyone who has this link.';
+      setTimeout(()=>{ b.style.display='none'; },4000);
+    } else if(state==='error'){
+      b.className='banner warn'; b.style.display='block';
+      b.innerHTML='<b>Connected, but the database call failed</b> ('+esc(msg||'')+'). Check that you ran <code>supabase-setup.sql</code> and that the URL/key are correct. Falling back to this-device storage for now.';
+      loadLocal();
+    }
+  }
+
+  // ---- boot ----
+  (async()=>{
+    if(!configured){ setBanner('unconfigured'); loadLocal(); render(); return; }
+    render();                 // instant paint with empty state
+    await loadState();        // pull shared data
+    render();                 // repaint with real tallies/notes
+    // gentle background refresh of tallies so the page feels live when shared
+    setInterval(refreshVotes, 25000);
+  })();
+</script>
+</body>
+</html>
