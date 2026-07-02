@@ -35,6 +35,10 @@
   /* CONTROLS */
   .controls{margin-top:32px;background:var(--card);border:2px solid var(--ink);padding:20px 22px;position:sticky;top:0;z-index:10}
   .controls h2{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--rust);margin-bottom:14px}
+  .ctoggle{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;font-family:'Spline Sans Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--rust);background:transparent;border:none;cursor:pointer;padding:2px 0}
+  .carrow{font-size:13px;transition:transform .15s;line-height:1}
+  .ctoggle[aria-expanded="true"] .carrow{transform:rotate(90deg)}
+  .cbody{margin-top:16px}
   .cgrid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr 1fr;gap:12px 16px;align-items:end}
   @media(max-width:880px){.cgrid{grid-template-columns:1fr 1fr}}
   @media(max-width:480px){.cgrid{grid-template-columns:1fr}}
@@ -103,11 +107,11 @@
     <div class="eyebrow">200 micro-businesses · &lt;$1k start · low-touch · AI-scalable · v1</div>
     <h1>Two hundred small bets.<br>Build one in a <em>hyperfocus,<br>then let it run, gift it, or<br>hand it to a cause.</em></h1>
     <p class="sub">Filter by what matters to you that week: cost to start, ongoing touch, how much AI carries it, and whether it's local, partnership-driven, kid/handoff-friendly, recurring, or fully digital. Each card is a starting point, not a finished plan.</p>
-    <div class="disclaimer"><b>These are ideas, not validated businesses.</b> No revenue numbers are attached — I won't invent those. Cost / touch / AI ratings are my rough directional estimates, not per-idea research; verify before banking on any. "Immediate income" is optimistic — most need real validation and setup first. A few items (mostly rentals/physical) exceed $1k and are flagged <b>$1k+</b> in red. Several touch regulated areas (food, childcare, health, finance) — licensing and rules apply. <b>Pressure-test the few you like; ignore the rest.</b></div>
   </div>
 
   <div class="controls">
-    <h2>Filter the bank</h2>
+    <button class="ctoggle" id="ctoggle" aria-expanded="false"><span>Filter &amp; sort</span><span class="carrow" id="carrow">▸</span></button>
+    <div class="cbody" id="cbody" style="display:none">
     <div class="cgrid">
       <div class="ctl"><label>Search</label><input type="text" id="q" placeholder="story, garden, AI, rental…"></div>
       <div class="ctl"><label>Category</label><select id="cat"></select></div>
@@ -143,6 +147,7 @@
       <button class="chip" data-tag="Digital">Fully digital</button>
       <button class="chip reset" id="reset">Reset all</button>
       <button class="refresh" id="refresh">↻ Refresh</button>
+    </div>
     </div>
     <div class="count" id="count"></div>
     <div class="sharednote" id="sharednote">▲ Votes and ✎ notes are <b>shared</b> — anyone you send this link to sees the same tallies and notes, and can add to them. Vote as many times as you like.</div>
@@ -565,6 +570,18 @@
     const btn=el('refresh'); const old=btn.textContent; btn.textContent='↻ …';
     await loadState(); render(); btn.textContent=old;
   });
+
+  // collapsible filter panel — collapsed by default (light for people you share with),
+  // remembers your choice on this device so your expanded view stays put.
+  const FKEY='idea-bank-filters-open';
+  function setFilters(open){
+    el('cbody').style.display = open ? 'block' : 'none';
+    el('ctoggle').setAttribute('aria-expanded', open ? 'true' : 'false');
+    try{ localStorage.setItem(FKEY, open ? '1' : '0'); }catch(e){}
+  }
+  el('ctoggle').addEventListener('click',()=>setFilters(el('cbody').style.display==='none'));
+  let _fopen=false; try{ _fopen = localStorage.getItem(FKEY)==='1'; }catch(e){}
+  setFilters(_fopen);
 
   // delegated handlers — survive re-render
   el('deck').addEventListener('click',async e=>{
